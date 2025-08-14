@@ -1,0 +1,18 @@
+<?php
+echo "<h1>Sum of Even Numbers in an Array</h1>";
+function sumEvenNumbers($numbers) {
+    $sum = 0;
+    foreach ($numbers as $num) {
+        if ($num % 2 == 0) {  
+            $sum += $num;
+        }
+    }
+    return $sum;
+}
+$array = array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+echo "<h3>Array:</h3>";
+print_r($array);
+$sumEven = sumEvenNumbers($array);
+echo "<h3>Sum of Even Numbers:</h3>";
+echo $sumEven;
+?>
