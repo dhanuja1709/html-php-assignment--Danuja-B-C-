@@ -1,0 +1,9 @@
+<?php
+$mainString = "The quick brown fox jumps over the lazy dog";
+$searchString = "fox";
+if (strpos($mainString, $searchString) !== false) {
+    echo "The string '<b>$searchString</b>' was found in the main string.";
+} else {
+    echo "The string '<b>$searchString</b>' was NOT found in the main string.";
+}
+?>
