@@ -1,0 +1,15 @@
+<?php
+$strings = array(
+    "Hello, welcome to PHP programming.",
+    "PHP is great for web development.",
+    "Learning PHP is fun!"
+);
+$search = "PHP";
+foreach ($strings as $str) {
+    if (strpos($str, $search) !== false) { 
+        echo "The string '$str' contains '$search'.<br>";
+    } else {
+        echo "The string '$str' does NOT contain '$search'.<br>";
+    }
+}
+?>
