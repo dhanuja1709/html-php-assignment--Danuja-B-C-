@@ -1,0 +1,62 @@
+<?php
+$students = array();
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+   $name = $_POST['student_name'];
+    $score = floatval($_POST['student_score']);
+    if ($score >= 90) {
+        $grade = "A+";
+    } elseif ($score >= 80) {
+        $grade = "A";
+    } elseif ($score >= 70) {
+        $grade = "B";
+    } elseif ($score >= 60) {
+        $grade = "C";
+    } elseif ($score >= 50) {
+        $grade = "D";
+    } else {
+        $grade = "F";
+    }
+    session_start();
+    if (!isset($_SESSION['students'])) {
+        $_SESSION['students'] = array();
+    }
+    $_SESSION['students'][] = array(
+        "name" => $name,
+        "score" => $score,
+        "grade" => $grade
+    );
+
+    $students = $_SESSION['students'];
+}
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Grade Calculator</title>
+</head>
+<body>
+<h2>Student Grade Input</h2>
+<form method="post">
+    Name: <input type="text" name="student_name" required>
+    Score: <input type="number" name="student_score" min="0" max="100" required>
+    <button type="submit">Add Student</button>
+</form>
+
+<?php
+if (!empty($students)) {
+    echo "<h2>Summary Report</h2>";
+    echo "<table border='1' cellpadding='5'>";
+    echo "<tr><th>Name</th><th>Score</th><th>Grade</th></tr>";
+    foreach ($students as $s) {
+        echo "<tr>";
+        echo "<td>" . htmlspecialchars($s['name']) . "</td>";
+        echo "<td>" . htmlspecialchars($s['score']) . "</td>";
+        echo "<td>" . htmlspecialchars($s['grade']) . "</td>";
+        echo "</tr>";
+    }
+    echo "</table>";
+}
+?>
+</body>
+</html>
