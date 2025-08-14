@@ -1,0 +1,10 @@
+<?php
+$text = "Contact us at support@example.com or sales@myshop.org. You can also reach admin123@domain.net.";
+$pattern = "/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,}/";
+preg_match_all($pattern, $text, $matches);
+$emails = $matches[0];
+echo "Found Email Addresses:<br>";
+foreach ($emails as $email) {
+    echo $email . "<br>";
+}
+?>
