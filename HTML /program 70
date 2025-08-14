@@ -1,0 +1,32 @@
+<?php
+$numbers = array(); 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $input = $_POST['numbers_input'];
+    $numbers = preg_split("/[\s,]+/", $input);
+    $numbers = array_map('floatval', $numbers);
+}
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Number Input to Array</title>
+</head>
+<body>
+<h2>Enter a sequence of numbers (comma or space separated):</h2>
+<form method="post">
+    <input type="text" name="numbers_input" size="50" placeholder="e.g. 1, 2, 3, 4, 5" required>
+    <button type="submit">Submit</button>
+</form>
+
+<?php
+if (!empty($numbers)) {
+    echo "<h3>Numbers stored in array:</h3>";
+    echo "<pre>";
+    print_r($numbers);
+    echo "</pre>";
+}
+?>
+</body>
+</html>
+
