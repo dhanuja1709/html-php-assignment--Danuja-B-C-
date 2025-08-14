@@ -1,0 +1,9 @@
+<?php
+$fruits = array("Apple", "Banana", "Cherry", "Mango");
+$total = count($fruits);
+$i = 0;
+while ($i < $total) {
+    echo "Fruit $i: " . $fruits[$i] . "<br>";
+    $i++;
+}
+?>
