@@ -1,0 +1,21 @@
+<?php
+function searchValueInAssocArray($array, $value) {
+    $keys = array_keys($array, $value, true); 
+    return $keys;
+}
+$students = array(
+    "dhanuja" => 95,
+    "lakshmi" => 82,
+    "janani"  => 68,
+    "amirtha" => 74,
+    "gopika"  => 55,
+    "jes"     => 82
+);
+$searchValue = 82;
+$resultKeys = searchValueInAssocArray($students, $searchValue);
+if (!empty($resultKeys)) {
+    echo "Value $searchValue found in: " . implode(", ", $resultKeys);
+} else {
+    echo "Value $searchValue not found in the array.";
+}
+?>
