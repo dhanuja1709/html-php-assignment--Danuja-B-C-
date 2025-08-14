@@ -1,0 +1,13 @@
+<?php
+echo "<h2>Extract Email Addresses using Regular Expressions</h2>";
+$text = "Contact us at support@example.com, sales@myshop.in or admin@test.org for more info.";
+$pattern = "/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}/";
+if (preg_match_all($pattern, $text, $matches)) {
+    echo "<strong>Extracted Email Addresses:</strong><br>";
+    foreach ($matches[0] as $email) {
+        echo $email . "<br>";
+    }
+} else {
+    echo "No email addresses found.";
+}
+?>
