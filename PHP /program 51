@@ -1,0 +1,11 @@
+<?php
+$fruits = array("Apple", "Banana", "Cherry");
+echo "<h3>Original Array:</h3>";
+print_r($fruits);
+$removed = array_shift($fruits);
+echo "<br><strong>Removed (array_shift):</strong> $removed<br>";
+print_r($fruits);
+array_unshift($fruits, "Mango", "Pineapple");
+echo "<br><strong>After array_unshift:</strong><br>";
+print_r($fruits);
+?>
