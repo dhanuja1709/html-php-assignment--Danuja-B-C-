@@ -1,0 +1,14 @@
+<?php
+function calculateAverage($numbers) {
+    if (count($numbers) === 0) {
+        return 0; 
+    }
+    $sum = array_sum($numbers); 
+    $average = $sum / count($numbers); 
+    return $average;
+}
+$nums = array(10, 20, 30, 40, 50);
+$avg = calculateAverage($nums);
+echo "Numbers: " . implode(", ", $nums) . "<br>";
+echo "Average Value: " . $avg;
+?>
