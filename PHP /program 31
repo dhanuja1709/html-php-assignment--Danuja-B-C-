@@ -1,0 +1,5 @@
+ <?php
+$fruits = array("Apple", "Banana", "Cherry", "Mango");
+array_shift($fruits); 
+print_r($fruits);
+?>
