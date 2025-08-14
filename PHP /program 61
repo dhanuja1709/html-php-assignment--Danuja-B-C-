@@ -1,0 +1,14 @@
+<?php
+echo "<h1>Delete an Element from an Array in PHP</h1>";
+$students = array("dhanuja", "lakshmi", "janani", "amirtha", "gopika", "jes");
+echo "<h3>Original Array:</h3>";
+print_r($students);
+$elementToDelete = "janani";
+$index = array_search($elementToDelete, $students);
+if ($index !== false) {
+    unset($students[$index]);
+}
+$students = array_values($students);
+echo "<h3>Array After Deleting '$elementToDelete':</h3>";
+print_r($students);
+?>
