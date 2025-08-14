@@ -1,0 +1,19 @@
+<?php
+$numbers = array(10, 20, 30, 40, 50);
+echo "<h2>Original Array:</h2>";
+print_r($numbers);
+echo "<hr><h3>Using array_pop() (removes from END)</h3>";
+$popValue = array_pop($numbers);
+echo "Value removed using array_pop(): $popValue<br>";
+echo "Array after array_pop(): ";
+print_r($numbers);
+echo "<hr><h3>Reset Array for array_shift() Example</h3>";
+$numbers = array(10, 20, 30, 40, 50);
+echo "Original Array Again: ";
+print_r($numbers);
+echo "<hr><h3>Using array_shift() (removes from BEGINNING)</h3>";
+$shiftValue = array_shift($numbers);
+echo "Value removed using array_shift(): $shiftValue<br>";
+echo "Array after array_shift(): ";
+print_r($numbers);
+?>
