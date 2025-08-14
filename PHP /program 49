@@ -1,0 +1,45 @@
+<?php
+echo "<h2> Sports Team Player Performance Evaluation</h2>";
+$players = array(
+    array("name" => "Dhanuja", "matches" => 15, "runs" => 820, "wickets" => 5),
+    array("name" => "Lakshmi", "matches" => 18, "runs" => 1040, "wickets" => 8),
+    array("name" => "Janani",  "matches" => 20, "runs" => 970,  "wickets" => 15),
+    array("name" => "Amirtha", "matches" => 12, "runs" => 600,  "wickets" => 2),
+    array("name" => "Gopika",  "matches" => 22, "runs" => 1200, "wickets" => 18),
+    array("name" => "Jes",     "matches" => 16, "runs" => 750,  "wickets" => 6)
+);
+function calculatePerformanceIndex($runs, $matches, $wickets) {
+    return ($runs / $matches) + ($wickets * 5);
+}
+foreach ($players as &$player) {
+    $player['PI'] = round(calculatePerformanceIndex($player['runs'], $player['matches'], $player['wickets']), 2);
+}
+unset($player); 
+$totalRuns = array_sum(array_column($players, 'runs'));
+$totalWickets = array_sum(array_column($players, 'wickets'));
+$totalMatches = array_sum(array_column($players, 'matches'));
+$averageRuns = round($totalRuns / count($players), 2);
+$averageWickets = round($totalWickets / count($players), 2);
+usort($players, function($a, $b) {
+    return $b['PI'] <=> $a['PI']; // Descending order
+});
+echo "<table border='1' cellpadding='5'>";
+echo "<tr><th>Rank</th><th>Name</th><th>Matches</th><th>Runs</th><th>Wickets</th><th>Performance Index</th></tr>";
+$rank = 1;
+foreach ($players as $player) {
+    echo "<tr>
+            <td>{$rank}</td>
+            <td>{$player['name']}</td>
+            <td>{$player['matches']}</td>
+            <td>{$player['runs']}</td>
+            <td>{$player['wickets']}</td>
+            <td>{$player['PI']}</td>
+          </tr>";
+    $rank++;
+}
+echo "</table>";
+echo "<h3> Team Statistics</h3>";
+echo "Average Runs per Player: $averageRuns<br>";
+echo "Average Wickets per Player: $averageWickets<br>";
+echo "Total Matches Played by Team: $totalMatches<br>";
+?>
