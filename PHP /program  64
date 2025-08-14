@@ -1,0 +1,48 @@
+<?php
+echo "<h1>Sales Forecast System</h1>";
+$salesData = array(
+    "January" => 120,
+    "February" => 135,
+    "March" => 150,
+    "April" => 160,
+    "May" => 180,
+    "June" => 200
+);
+echo "<h3>Historical Sales Data (in thousands):</h3>";
+echo "<ul>";
+foreach ($salesData as $month => $sales) {
+    echo "<li>$month : $sales</li>";
+}
+echo "</ul>";
+$growthRates = array();
+$previous = null;
+foreach ($salesData as $month => $sales) {
+    if ($previous !== null) {
+        $growthRates[$month] = round((($sales - $previous) / $previous) * 100, 2); 
+    }
+    $previous = $sales;
+}
+echo "<h3>Monthly Growth Rates (%):</h3>";
+echo "<ul>";
+foreach ($growthRates as $month => $rate) {
+    echo "<li>$month : $rate%</li>";
+}
+echo "</ul>";
+$averageGrowth = round(array_sum($growthRates) / count($growthRates), 2);
+echo "<h3>Average Monthly Growth Rate: $averageGrowth%</h3>";
+$lastMonthSales = end($salesData);
+$forecastMonths = array("July", "August", "September");
+$forecastSales = array();
+foreach ($forecastMonths as $month) {
+    $nextSales = round($lastMonthSales * (1 + $averageGrowth / 100), 2);
+    $forecastSales[$month] = $nextSales;
+    $lastMonthSales = $nextSales;
+}
+echo "<h3>Forecasted Sales (in thousands):</h3>";
+echo "<ul>";
+foreach ($forecastSales as $month => $sales) {
+    echo "<li>$month : $sales</li>";
+}
+echo "</ul>";
+?>
+
