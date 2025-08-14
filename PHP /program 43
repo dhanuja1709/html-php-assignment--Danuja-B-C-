@@ -1,0 +1,19 @@
+<?php
+$passwords = array(
+    "Abc123!@",  
+    "password",
+    "PASS123@",  
+    "Passw1@",
+    "ValidPass123#"
+);
+
+$pattern = "/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/";
+
+foreach ($passwords as $pwd) {
+    if (preg_match($pattern, $pwd)) {
+        echo " '$pwd' is a valid password.<br>";
+    } else {
+        echo " '$pwd' is NOT valid.<br>";
+    }
+}
+?>
