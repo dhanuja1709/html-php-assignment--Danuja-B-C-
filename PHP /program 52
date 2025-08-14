@@ -1,0 +1,25 @@
+<?php
+echo "<h2> Stack (LIFO)</h2>";
+$stack = array();
+array_push($stack, "Apple");
+array_push($stack, "Banana");
+array_push($stack, "Cherry");
+echo "Stack after pushes: ";
+print_r($stack);
+$popped = array_pop($stack);
+echo "<br>Element popped: $popped<br>";
+echo "Stack after pop: ";
+print_r($stack);
+echo "<hr>";
+echo "<h2> Queue (FIFO)</h2>";
+$queue = array();
+array_push($queue, "Red");
+array_push($queue, "Green");
+array_push($queue, "Blue");
+echo "Queue after enqueues: ";
+print_r($queue);
+$dequeued = array_shift($queue);
+echo "<br>Element dequeued: $dequeued<br>";
+echo "Queue after dequeue: ";
+print_r($queue);
+?>
