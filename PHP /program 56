@@ -1,0 +1,16 @@
+<?php
+function reverseString($input) {
+    $stack = array();
+    for ($i = 0; $i < strlen($input); $i++) {
+        array_push($stack, $input[$i]);
+    }
+    $reversed = '';
+    while (!empty($stack)) {
+        $reversed .= array_pop($stack);
+    }
+    return $reversed;
+}
+$original = "Hello World";
+echo "Original String: " . $original . "<br>";
+echo "Reversed String: " . reverseString($original);
+?>
