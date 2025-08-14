@@ -1,0 +1,16 @@
+<?php
+$Color = array('A' => 'Blue', 'B' => 'Green', 'c' => 'Red');
+function arrayToLower($arr) {
+    return array_map('strtolower', $arr);
+}
+function arrayToUpper($arr) {
+    return array_map('strtoupper', $arr);
+}
+$lowerCaseArray = arrayToLower($Color);
+echo "Values are in lower case.<br>";
+print_r($lowerCaseArray);
+echo "<br><br>";
+$upperCaseArray = arrayToUpper($Color);
+echo "Values are in upper case.<br>";
+print_r($upperCaseArray);
+?>
