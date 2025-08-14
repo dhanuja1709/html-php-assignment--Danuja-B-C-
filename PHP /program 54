@@ -1,0 +1,28 @@
+<?php
+$ticketQueue = array();
+function bookTicket(&$queue, $name) {
+    array_push($queue, $name); 
+    echo "$name has been added to the booking queue.<br>";
+}
+function serveCustomer(&$queue) {
+    if (!empty($queue)) {
+        $customer = array_shift($queue); 
+        echo "$customer's ticket has been booked!<br>";
+    } else {
+        echo "No customers in the queue.<br>";
+    }
+}
+bookTicket($ticketQueue, "Dhanuja");
+bookTicket($ticketQueue, "Lakshmi");
+bookTicket($ticketQueue, "Jannai");
+bookTicket($ticketQueue, "Amirtha");
+bookTicket($ticketQueue, "Gopika");
+bookTicket($ticketQueue, "Jes");
+echo "<hr><b>Current Queue:</b><br>";
+print_r($ticketQueue);
+echo "<hr><b>Serving Customers:</b><br>";
+serveCustomer($ticketQueue);
+serveCustomer($ticketQueue);
+echo "<hr><b>Queue after serving two customers:</b><br>";
+print_r($ticketQueue);
+?>
