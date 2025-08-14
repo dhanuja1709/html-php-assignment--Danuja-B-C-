@@ -1,0 +1,26 @@
+<?php
+echo "<h2>Regular Expression Examples in PHP</h2>";
+$email = "test@example.com";
+if (preg_match("/^[\w.-]+@[\w.-]+\.[a-z]{2,}$/i", $email)) {
+    echo " Valid Email<br>";
+} else {
+    echo " Invalid Email<br>";
+}
+$text = "There are 3 cats, 14 dogs, and 27 birds.";
+preg_match_all("/\d+/", $text, $matches);
+echo "Numbers Found: ";
+print_r($matches[0]);
+echo "<br>";
+$str = "Hello    World   PHP";
+$result = preg_replace("/\s+/", " ", $str);
+echo "After Space Cleanup: $result<br>";
+$str2 = "apple,banana;cherry orange";
+$parts = preg_split("/[^a-z]+/i", $str2);
+echo "Split Words: ";
+print_r($parts);
+echo "<br>";
+$sentence = "Dhanuja and Lakshmi went to Chennai with Gopika.";
+preg_match_all("/\b[A-Z][a-z]*\b/", $sentence, $names);
+echo "Names Found: ";
+print_r($names[0]);
+?>
