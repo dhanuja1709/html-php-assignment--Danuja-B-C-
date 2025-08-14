@@ -1,0 +1,4 @@
+<?php
+$fruits = array("Apple", "Banana", "Cherry", "Mango", "Orange");
+echo "The third fruit is: " . $fruits[2];
+?>
