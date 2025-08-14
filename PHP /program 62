@@ -1,0 +1,11 @@
+<?php
+echo "<h1>Rounding Values in PHP</h1>";
+$values = array(1.65, 1.65, -1.54);
+echo "<h3>Original Values:</h3>";
+print_r($values);
+$roundedValues = array_map(function($val) {
+    return round($val, 1);
+}, $values);
+echo "<h3>Rounded Values (1 decimal place):</h3>";
+print_r($roundedValues);
+?>
