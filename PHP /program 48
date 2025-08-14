@@ -1,0 +1,27 @@
+<?php
+echo "<h2> Record Number Handling in PHP</h2>";
+$students = array("Anand", "Priya", "Karthik", "Divya", "Lakshmi");
+echo "<h3>Example 1: Record Numbers with Array</h3>";
+$recordNumber = 1;
+foreach ($students as $name) {
+    echo "Record #$recordNumber: $name<br>";
+    $recordNumber++;
+}
+$studentMarks = array(
+    array("name" => "Anand", "marks" => 85),
+    array("name" => "Priya", "marks" => 92),
+    array("name" => "Karthik", "marks" => 78),
+    array("name" => "Divya", "marks" => 88)
+);
+echo "<h3>Example 2: Record Numbers with Multidimensional Array (Simulated DB)</h3>";
+$recordNumber = 1;
+foreach ($studentMarks as $student) {
+    echo "Record #$recordNumber: " . $student['name'] . " - Marks: " . $student['marks'] . "<br>";
+    $recordNumber++;
+}
+$items = array("Pen", "Pencil", "Eraser");
+echo "<h3>Example 3: Using array_keys() to Get Record Numbers</h3>";
+foreach (array_keys($items) as $index) {
+    echo "Record #" . ($index + 1) . ": " . $items[$index] . "<br>";
+}
+?>
