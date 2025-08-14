@@ -1,0 +1,7 @@
+<?php
+$text = "PHP is great. I love PHP because PHP is powerful.";
+$pattern = "/\bPHP\b/"; 
+$replacement = "Java";
+$result = preg_replace($pattern, $replacement, $text);
+echo $result;
+?>
