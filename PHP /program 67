@@ -1,0 +1,14 @@
+<?php
+$sentence = "PHP is great. PHP is easy to learn. Learning PHP is fun!";
+$sentence = strtolower($sentence);
+preg_match_all("/\w+/", $sentence, $words);
+$wordsArray = $words[0];
+$wordCounts = array_count_values($wordsArray);
+echo "<h2>Word Occurrences</h2>";
+echo "<table border='1' cellpadding='5'>";
+echo "<tr><th>Word</th><th>Count</th></tr>";
+foreach ($wordCounts as $word => $count) {
+    echo "<tr><td>" . htmlspecialchars($word) . "</td><td>" . $count . "</td></tr>";
+}
+echo "</table>";
+?>
