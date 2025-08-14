@@ -1,0 +1,37 @@
+<?php
+function arrayDiffMulti($array1, $array2) {
+    $result = array();
+    foreach ($array1 as $key => $value) {
+        if (is_array($value)) {   
+            if (!isset($array2[$key]) || !is_array($array2[$key])) {
+                $result[$key] = $value;
+            } else {
+                $diff = arrayDiffMulti($value, $array2[$key]);
+                if (!empty($diff)) {
+                    $result[$key] = $diff;
+                }
+            }
+        } else {
+            // Compare scalar values
+            if (!in_array($value, $array2)) {
+                $result[$key] = $value;
+            }
+        }
+    }
+    return $result;
+}
+$array1 = array(
+    "fruits" => array("apple", "banana", "mango"),
+    "numbers" => array(1, 2, 3, 4),
+    "colors" => array("red", "green")
+);
+$array2 = array(
+    "fruits" => array("apple", "banana"),
+    "numbers" => array(2, 3, 4, 5),
+    "colors" => array("green", "blue")
+);
+$difference = arrayDiffMulti($array1, $array2);
+echo "<pre>";
+print_r($difference);
+echo "</pre>";
+?>
