@@ -1,0 +1,12 @@
+<?php
+$text = "Hello@123! Welcome_to PHP#2025.";
+$chars = str_split($text);
+$allowed = array_merge(range('a', 'z'), range('A', 'Z'), range('0', '9'), array(' '));
+$result = array_filter($chars, function($char) use ($allowed) {
+    return in_array($char, $allowed);
+});
+$cleanString = implode('', $result);
+echo "Original: $text<br>";
+echo "Cleaned: $cleanString";
+?>
+
