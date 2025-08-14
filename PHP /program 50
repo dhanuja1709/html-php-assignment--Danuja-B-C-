@@ -1,0 +1,11 @@
+<?php
+$names = array("Dhanuja", "Lakshmi", "Janani", "Amirtha", "Gopika", "Jes");
+echo "<h2> Original Array</h2>";
+print_r($names);
+$lowercaseArray = array_map('strtolower', $names);
+$uppercaseArray = array_map('strtoupper', $names);
+echo "<h2> Lowercase Array</h2>";
+print_r($lowercaseArray);
+echo "<h2> Uppercase Array</h2>";
+print_r($uppercaseArray);
+?>
