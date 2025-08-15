@@ -1,0 +1,31 @@
+<?php
+$file = "test.txt";
+$fp = fopen($file, "r");
+echo "<b>Reading file (r):</b><br>";
+echo nl2br(fread($fp, filesize($file))) . "<br><br>";
+fclose($fp);
+$fp = fopen($file, "r+");
+fwrite($fp, "Start of file changed.\n");
+fclose($fp);
+$fp = fopen($file, "w");
+fwrite($fp, "This text overwrites the file.\n");
+fclose($fp);
+$fp = fopen($file, "w+");
+fwrite($fp, "Overwritten again, but can also read.\n");
+rewind($fp);
+echo "<b>w+ content:</b><br>" . nl2br(fread($fp, filesize($file))) . "<br><br>";
+fclose($fp);
+$fp = fopen($file, "a");
+fwrite($fp, "Appended line (a mode).\n");
+fclose($fp);
+$fp = fopen($file, "a+");
+fwrite($fp, "Appended again with a+ mode.\n");
+fclose($fp);
+echo "<b>File size:</b> " . filesize($file) . " bytes<br><br>";
+copy($file, "copy_test.txt");
+echo "File copied to copy_test.txt<br>";
+rename("copy_test.txt", "renamed_test.txt");
+echo "copy_test.txt renamed to renamed_test.txt<br>";
+unlink("renamed_test.txt");
+echo "renamed_test.txt deleted<br>";
+?>
