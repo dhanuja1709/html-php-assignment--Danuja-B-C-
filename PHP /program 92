@@ -1,0 +1,8 @@
+<?php
+setcookie("username", "Lakshmisree", time() + 60, "/");
+if (isset($_COOKIE["username"])) {
+    echo "Welcome, " . $_COOKIE["username"];
+} else {
+    echo "Hello, new visitor!";
+}
+?>
