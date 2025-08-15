@@ -1,0 +1,9 @@
+<?php
+session_start(); // Start the session
+if (isset($_SESSION['pageviews'])) {
+    $_SESSION['pageviews']++; 
+} else {
+    $_SESSION['pageviews'] = 1; 
+}
+echo "You have visited this page " . $_SESSION['pageviews'] . " times.";
+?>
