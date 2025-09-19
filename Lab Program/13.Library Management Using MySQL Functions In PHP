@@ -1,0 +1,397 @@
+db.php
+
+<?php
+$conn = mysqli_connect('localhost', 'root', '', 'library_db');
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+?>
+
+register.php
+
+<?php
+session_start();
+include 'db.php';
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $name = mysqli_real_escape_string($conn, $_POST['name']);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $pw = password_hash($_POST['password'], PASSWORD_BCRYPT);
+    $sql = "INSERT INTO users (name, email, password) VALUES ('$name', '$email', '$pw')";
+    if (mysqli_query($conn, $sql)) {
+        $_SESSION['message'] = "Registration successful! Please login.";
+        header("Location: login.php");
+        exit();
+    } else {
+        echo "Error: " . mysqli_error($conn);
+    }
+}
+mysqli_close($conn);
+?>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Public Library - Register</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      text-align: center;
+    }
+    table {
+      margin: 0 auto;
+      border-collapse: collapse;
+      width: 400px;
+    }
+    td {
+      padding: 8px;
+      text-align: left;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    input[type="submit"] {
+      border: none;
+      padding: 10px 18px;
+      font-weight: bold;
+      border-radius: 4px;
+      width: 100%;
+      cursor: pointer;
+      background-color: black;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <h1>Public Library</h1>
+  <h2>Register</h2>
+  <form method="post">
+    <table>
+      <tr><td>Name</td><td><input name="name" type="text" required></td></tr>
+      <tr><td>Email</td><td><input name="email" type="email" required></td></tr>
+      <tr><td>Password</td><td><input name="password" type="password" required></td></tr>
+      <tr><td colspan="2"><input type="submit" value="Register"></td></tr>
+    </table>
+  </form>
+  <p>Already have an account? <a href="login.php">Login here</a>.</p>
+</body>
+</html>
+
+login.php
+
+<?php
+session_start();
+include 'db.php';
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $pw = $_POST['password'];
+    $res = mysqli_query($conn, "SELECT * FROM users WHERE email='$email'");
+    if (mysqli_num_rows($res) > 0) {
+        $user = mysqli_fetch_assoc($res);
+        if (password_verify($pw, $user['password'])) {
+            $_SESSION['user_id'] = $user['user_id'];
+            $_SESSION['user_name'] = $user['name'];
+            header("Location: view_books.php");
+            exit();
+        } else {
+            $error = "Incorrect password!";
+        }
+    } else {
+        $error = "User not found!";
+    }
+}
+mysqli_close($conn);
+?>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Public Library - Login</title>
+  <style>
+    body {
+      background-color: white;
+      color: black;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      text-align: center;
+    }
+    table {
+      margin: 0 auto;
+      border-collapse: collapse;
+      width: 400px;
+    }
+    td {
+      padding: 8px;
+      text-align: left;
+    }
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid ;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    input[type="submit"] {
+      border: none;
+      padding: 10px 18px;
+      font-weight: bold;
+      border-radius: 4px;
+      width: 100%;
+      cursor: pointer;
+      background-color: black;
+      color: white;
+    }
+    p {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Public Library</h1>
+  <h2>Login</h2>
+  <?php if (!empty($_SESSION['message'])) { echo $_SESSION['message']; unset($_SESSION['message']); } ?>
+  <?php if (!empty($error)) { echo "<p style='color:red;'>$error</p>"; } ?>
+  <form method="post">
+    <table>
+      <tr><td>Email</td><td><input name="email" type="email" required></td></tr>
+      <tr><td>Password</td><td><input name="password" type="password" required></td></tr>
+      <tr><td colspan="2"><input type="submit" value="Login"></td></tr>
+    </table>
+  </form>
+  <p>No account? <a href="register.php">Register here</a>.</p>
+</body>
+</html>
+
+add_book.php
+
+<?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+include 'db.php';
+$message = '';
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $title = mysqli_real_escape_string($conn, $_POST['title']);
+    $author = mysqli_real_escape_string($conn, $_POST['author']);
+    
+    $sql = "INSERT INTO books (title, author) VALUES ('$title', '$author')";
+    if (mysqli_query($conn, $sql)) {
+        $message = "Book added successfully!";
+    } else {
+        $message = "Error adding book: " . mysqli_error($conn);
+    }
+}
+mysqli_close($conn);
+?>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Public Library - Add Book</title>
+  <style>
+    body {
+      background-color: white;
+      color: black;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      text-align: center;
+    }
+    table {
+      margin: 0 auto 20px auto;
+      border-collapse: collapse;
+      width: 400px;
+    }
+    td {
+      padding: 8px;
+      text-align: left;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid ;
+      box-sizing: border-box;
+    }
+    input[type="submit"] {
+      background-color: black;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      font-weight: bold;
+      border-radius: 4px;
+      width: 100%;
+      cursor: pointer;
+    }
+    input[type="submit"]:hover {
+      background-color: black;
+    }
+    p {
+      margin-top: 20px;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <h1>Public Library</h1>
+  <h2>Add Book</h2>
+  <?php if ($message) echo "<p>$message</p>"; ?>
+  <form method="post" action="">
+    <table>
+      <tr><td>Title</td><td><input name="title" type="text" required></td></tr>
+      <tr><td>Author</td><td><input name="author" type="text" required></td></tr>
+      <tr><td colspan="2"><input type="submit" value="Add Book"></td></tr>
+    </table>
+  </form>
+  <p><a href="view_books.php">View Books</a> | <a href="logout.php">Logout</a></p>
+</body>
+</html>
+
+view_book.php
+
+<?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+include 'db.php';
+$result = mysqli_query($conn, "SELECT * FROM books");
+mysqli_close($conn);
+?>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Public Library - View Books</title>
+  <style>
+    body {
+      background-color: white;
+      color: black;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      text-align: center;
+    }
+    table {
+      margin: 0 auto 20px auto;
+      border-collapse: collapse;
+      width: 600px;
+    }
+    th, td {
+      padding: 8px;
+      border: 1px solid black;
+      text-align: left;
+      color: black;
+    }
+    a {
+      color: black;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    p {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Public Library</h1>
+  <h2>Books Available in Library</h2>
+  <table>
+    <tr>
+      <th>Book Title</th>
+      <th>Author</th>
+      <th>Status</th>
+      <th>Change Status</th>
+      <th>Delete</th>
+    </tr>
+    <?php
+    while ($book = mysqli_fetch_assoc($result)) {
+        echo "<tr>";
+        echo "<td>" . htmlspecialchars($book['title']) . "</td>";
+        echo "<td>" . htmlspecialchars($book['author']) . "</td>";
+        echo "<td>" . ($book['available'] ? "Available" : "Not available") . "</td>";
+        echo "<td><a href='update.php?book_id=" . $book['book_id'] . "&available=" . ($book['available'] ? 0 : 1) . "' onclick='return confirm(\"Change availability?\")'>" . ($book['available'] ? "Mark Not Available" : "Mark Available") . "</a></td>";
+        echo "<td><a href='delete.php?book_id=" . $book['book_id'] . "' onclick='return confirm(\"Delete this book?\")'>Delete</a></td>";
+        echo "</tr>";
+    }
+    ?>
+  </table>
+  <p><a href="add_book.php">Add Book</a> | <a href="logout.php">Logout</a></p>
+</body>
+</html>
+
+update.php
+
+<?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+include 'db.php';
+if (isset($_GET['book_id']) && isset($_GET['available'])) {
+    $book_id = intval($_GET['book_id']);
+    $available = intval($_GET['available']);
+    $sql = "UPDATE books SET available = $available WHERE book_id = $book_id";
+    if (mysqli_query($conn, $sql)) {
+        header("Location: view_books.php");
+        exit();
+    } else {
+        echo "Error updating book status: " . mysqli_error($conn);
+    }
+}
+mysqli_close($conn);
+?>
+delete.php
+<?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+include 'db.php';
+if (isset($_GET['book_id'])) {
+    $book_id = intval($_GET['book_id']);
+    $sql = "DELETE FROM books WHERE book_id = $book_id";
+    if (mysqli_query($conn, $sql)) {
+        header("Location: view_books.php");
+        exit();
+    } else {
+        echo "Error deleting book: " . mysqli_error($conn);
+    }
+}
+mysqli_close($conn);
+?>
+
+logout.php
+
+<?php
+session_start();
+session_destroy();
+header("Location: login.php");
+exit();
+
+
+
+
+CREATE DATABASE library_db;
+USE library_db;
+CREATE TABLE users (
+  user_id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(100) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL
+);
+CREATE TABLE books (
+  book_id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  author VARCHAR(100) NOT NULL,
+  available INT NOT NULL DEFAULT 1
+);
+
