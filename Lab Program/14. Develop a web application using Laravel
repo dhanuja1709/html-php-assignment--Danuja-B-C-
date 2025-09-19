@@ -1,0 +1,407 @@
+web.php
+
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EmployeeController;
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
+Route::get('/', function () {
+    return view('welcome');
+});
+Route::get('/list',[EmployeeController::class, 'index'])->name('employee_list');
+Route::get('/create',[EmployeeController::class, 'create_form'])->name('employee_create');
+Route::post('/create',[EmployeeController::class, 'create'])->name('employee_submit');
+Route::get('/employee/{id}',[EmployeeController::class, 'get_employee'])->name('employee_edit');
+Route::post('/update/{id}',[EmployeeController::class, 'update'])->name('employee_update');
+Route::post('/delete',[EmployeeController::class, 'delete'])->name('employee_delete');
+
+2025_08_29_092337_create_employees_table.php
+
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('employees', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->string('phone')->nullable();
+            $table->string('position')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('employees');
+    }
+};
+
+controller.php
+
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Routing\Controller as BaseController;
+
+class Controller extends BaseController
+{
+    use AuthorizesRequests, ValidatesRequests;
+}
+
+user.php
+
+<?php
+
+namespace App\Models;
+
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+
+class User extends Authenticatable
+{
+    use HasApiTokens, HasFactory, Notifiable;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+    ];
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+}
+
+Employees.php
+
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Employees extends Model
+{
+    use HasFactory;
+    protected $fillable = [
+        'name',
+        'email',
+        'phone',
+        'position'
+    ];
+}
+
+EmployeeController.php
+
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\Employees;
+
+class EmployeeController extends Controller
+{public function index(){   
+        $employees = Employees::all(); 
+        return view('employee.list',compact('employees'));
+    }
+    public function create_form(){
+        return view('employee.create');
+    }
+
+    public function create(Request $req){
+        $validated = $req->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:employees,email',
+            'phone' => 'required|string|max:13',
+            'position' => 'nullable|string|max:255',
+        ]);
+
+        Employees::create($validated);
+
+        return redirect('/create')->with('success', 'Employee Created successfully');
+    }
+public function get_employee($id){
+        $employee = Employees::findOrFail($id);
+        return view('employee.edit', compact('employee'));
+    }
+
+    public function update(Request $req, $id){
+        $validated = $req->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:employees,email,'. $id,
+            'phone' => 'required|string|max:13',
+            'position' => 'nullable|string|max:255',
+        ]);
+
+        $employee = Employees::findOrFail($id);
+        $employee->update($validated);
+
+        return redirect('/employee/'.$id)->with('success', 'Employee updated successfully');
+    }
+
+    public function delete(Request $req)
+    {
+        $id = $req->id;
+
+        $employee = Employees::findOrFail($id);
+        $employee->delete();
+        return redirect()->route('employee_list')->with('success', 'Employee deleted.');
+    }
+    //
+}
+
+create.blade.php
+
+@extends('layouts.app')
+@section('title','Employee Create')
+@section('content')
+<div class="card-body">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+        <h5 class="mb-0">Employee Create</h5>
+    </div>
+</div>
+<form method="POST" name="employee_create" action="{{ url('/create') }}">
+  @csrf
+  <div class="row g-3">
+    <div class="col-md-6">
+      <label class="form-label">Name <span class="text-danger">*</span></label>
+      <input type="text" name="name" class="form-control" placeholder="Jane Doe">
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label">Email <span class="text-danger">*</span></label>
+      <input type="email" name="email" class="form-control" placeholder="jane@example.com">
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label">Phone</label>
+      <input type="text" name="phone" class="form-control" placeholder="+91 90000 00000">
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label">Position</label>
+      <input type="text" name="position" class="form-control" placeholder="Software Engineer">
+    </div>
+  </div>
+
+  <div class="d-flex gap-2 mt-4">
+    <button class="btn btn-primary px-4" type="submit">Create</button>
+    <a href="{{ url('/list') }}" class="btn btn-outline-secondary">Cancel</a>
+  </div>
+</form>
+
+@endsection
+
+edit.blade.php
+
+@extends('layouts.app')
+@section('title','Employee Update')
+@section('content')
+<div class="card-body">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+        <h5 class="mb-0">Employee Update</h5>
+    </div>
+</div>
+<form method="POST" name="employee_update" action="{{ route('employee_update', $employee->id) }}">
+  @csrf
+  <div class="row g-3">
+    <div class="col-md-6">
+      <label class="form-label">Name <span class="text-danger">*</span></label>
+      <input type="text" name="name" class="form-control" value="{{ $employee->name }}">
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label">Email <span class="text-danger">*</span></label>
+      <input type="email" name="email" class="form-control" value="{{ $employee->email }}">
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label">Phone</label>
+      <input type="text" name="phone" class="form-control" value="{{ $employee->phone }}">
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label">Position</label>
+      <input type="text" name="position" class="form-control" value="{{ $employee->position }}">
+    </div>
+  </div>
+
+  <div class="d-flex gap-2 mt-4">
+    <button class="btn btn-primary px-4" type="submit">Update</button>
+    <a href="{{ url('/list') }}" class="btn btn-outline-secondary">Cancel</a>
+  </div>
+</form>
+
+@endsection
+
+app.blade.php
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>@yield('title','Laravel Crud')</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background: #f6f8fb; }
+    .card { border: 0; border-radius: 1rem; box-shadow: 0 8px 24px rgba(0,0,0,.06); }
+    .navbar { box-shadow: 0 4px 12px rgba(0,0,0,.04); }
+    .form-control, .btn { border-radius: .75rem; }
+    .table thead th { background:#f0f3f8; }
+    .badge-soft { background:#eef5ff; color:#0d6efd; }
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-light bg-white mb-4">
+  <div class="container">
+    <a class="navbar-brand fw-bold" >Laravel Crud</a>
+  </div>
+</nav>
+
+<div class="container mb-5">
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
+    @if($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
+    @yield('content')
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+list.blade.php
+
+@extends('layouts.app')
+
+@section('content')
+<div class="card">
+    <div class="card-body">
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+            <h5 class="mb-0">Employees</h5>
+            <div class="d-flex gap-2">
+                <form method="GET" class="d-flex">
+                {{--<input type="text" name="q" value="{{ $q }}" class="form-control me-2" placeholder="Search name, email, phone, position">
+                <button class="btn btn-outline-primary" type="submit">Search</button> --}}
+                </form>
+                <a class="btn btn-primary" href="{{ url('/create') }}">+ Add Employee</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive mx-2">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Name & Email</th>
+            <th>Phone</th>
+            <th>Position</th>
+            <th>Created At</th>
+            <th>Updated At</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+            @if(!empty($employees))
+                @foreach($employees as $emp)
+                    <tr>
+                    <td>{{ $emp->id }}</td>
+                    <td>
+                        <div class="fw-semibold">{{ $emp->name }}</div>
+                        <div class="text-muted small">{{ $emp->email }}</div>
+                    </td>
+                    <td>{{ $emp->phone ?: '—' }}</td>
+                    <td><span class="badge badge-soft">{{ $emp->position ?: '—' }}</span></td>
+                    <td class="text-muted">{{ $emp->created_at->format('d M Y') }}</td>
+                    <td class="text-muted">{{ $emp->updated_at->format('d M Y') }}</td>
+                    <td class="text-end">
+                        <a href="{{ url('/employee/'.$emp->id) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                        <form action="{{ route('employee_delete') }}" method="POST" class="d-inline"
+                            onsubmit="return confirm('Delete this employee?');">
+                            @csrf
+                            <input type="hidden" name="id" value="{{ $emp->id }}">
+                            <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
+                        </form>
+                    </td>
+                    </tr>
+                @endforeach
+                @else
+                    <tr><td colspan="6" class="text-center text-muted py-4">No employees found.</td></tr>
+                @endif
+        </tbody>
+      </table>
+    </div>
+
+</div>
+@endsection
