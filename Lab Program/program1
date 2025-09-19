@@ -1,0 +1,369 @@
+index.html
+
+<html>
+<head>
+  <title>Anugrahaa V - Resume</title>
+</head>
+<frameset rows="20%,70%,10%">
+  <frame src="header.html" name="header" scrolling="no" noresize>
+  <frameset cols="20%,80%">
+	<frame src="menu.html" name="menu" scrolling="auto" noresize>
+	<frame src="content.html" name="content">
+  </frameset>
+  <frame src="footer.html" name="footer" scrolling="no" noresize>
+</frameset>
+</html>
+
+home.html
+
+<html>
+<body bgcolor="#e6f2ff">
+  <center>
+    <img src="C:\htmlnew\indeximg.jpg"
+ width="350" height="250" style="border-radius: 50%; margin-top: 20px;"><br><br>
+    <h2>Welcome!</h2>
+    <p>This is my online resume. Use the menu on the left to explore my details.</p>
+  </center></body></html>
+  
+header.html
+
+<html>
+<body bgcolor="#003366">
+  <center>
+	<font color="white" size="6" face="Arial"><b>Anugrahaa V</b></font><br>
+	<font color="lightgray" size="4">B.Sc. Computer Science Student</font>
+  </center>
+</body>
+</html>
+
+menu.html
+
+<html>
+<body bgcolor="#66cccc" style="font-family: Arial, sans-serif; padding: 10px;">
+   <h3 style="
+	display: inline-block;
+	border: 2px solid #333;
+	padding: 8px 15px;
+	background-color: #F08784;
+	border-radius: 10px;
+	color: white;
+	box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+  ">
+	Navigation
+  </h3>
+<br><br>
+  <div style="line-height: 1.8; font-size: 16px;">
+	<a href="objective.html" target="content" style="text-decoration: none; color: #003366;" onmouseover="this.style.color='darkred'" onmouseout="this.style.color='#003366'">Career Objective</a><br>
+	<a href="education.html" target="content" style="text-decoration: none; color: #003366;" onmouseover="this.style.color='darkred'" onmouseout="this.style.color='#003366'">Education</a><br>
+	<a href="internship.html" target="content" style="text-decoration: none; color: #003366;" onmouseover="this.style.color='darkred'" onmouseout="this.style.color='#003366'">Internship</a><br>
+	<a href="skills.html" target="content" style="text-decoration: none; color: #003366;" onmouseover="this.style.color='darkred'" onmouseout="this.style.color='#003366'">Technical Skills</a><br>
+	<a href="projects.html" target="content" style="text-decoration: none; color: #003366;" onmouseover="this.style.color='darkred'" onmouseout="this.style.color='#003366'">Projects</a><br>
+	<a href="languages.html" target="content" style="text-decoration: none; color: #003366;" onmouseover="this.style.color='darkred'" onmouseout="this.style.color='#003366'">Languages Known</a><br>
+	<a href="strengths.html" target="content" style="text-decoration: none; color: #003366;" onmouseover="this.style.color='darkred'" onmouseout="this.style.color='#003366'">Key Strengths</a><br>
+	<a href="declaration.html" target="content" style="text-decoration: none; color: #003366;" onmouseover="this.style.color='darkred'" onmouseout="this.style.color='#003366'">Declaration</a><br>
+	<a href="contact.html" target="content" style="text-decoration: none; color: #003366;" onmouseover="this.style.color='darkred'" onmouseout="this.style.color='#003366'">Contact</a><br>
+  </div>
+</body></html>
+
+objective.html
+
+<html>
+<head>
+  <title>Career Objective</title>
+  <style>
+    body {
+      background: #D3D3D3;
+      font-family: Arial, sans-serif;
+    }
+    .career-box {
+      background: #fff;
+      border: 2px solid #4da6ff;
+      border-radius: 10px;
+      
+      margin: 30px auto;
+      width: 80%;
+      
+    }
+    h2 {
+      color: #003366;
+      text-align: center;
+    }
+    p, ul {
+      text-align: justify;
+      line-height: 1.6;
+      font-size: 16px;
+      color: #333;
+    }
+    ul {
+      margin-top: 10px;
+      margin-bottom: 10px;
+     
+    }
+    .btn {
+      display: inline-block;
+     
+      background: #4da6ff;
+      color: #fff;
+     
+      border-radius: 5px;
+      margin: 20px;
+    }
+       .center-img {
+      text-align: center;
+      margin: 15px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="career-box">
+    <h2>Career Objective</h2>
+    <div class="center-img">
+      <img src="C:\Users\anugr\OneDrive\Desktop\objimg.jpg" height="150" width="600">
+    </div>
+    <p>
+      I am a passionate and highly motivated Computer Science student with a strong foundation in programming languages such as Java and SQL, along with a growing interest in backend development and software engineering. My academic journey has equipped me with essential problem-solving abilities and logical thinking skills, which I consistently apply to both classroom projects and self-driven learning.
+     I possess excellent communication and interpersonal skills, enabling me to collaborate effectively in team environments and contribute to shared goals. I am a quick learner, eager to explore emerging technologies, and adapt easily to new tools or frameworks. My goal is to secure a role in a dynamic and growth-oriented organization where I can:
+    </p>
+    <ul>
+      <li>Apply my technical and analytical skills to solve real-world challenges</li>
+      <li>Gain hands-on experience in the software development lifecycle</li>
+      <li>Work alongside experienced professionals and mentors</li>
+      <li>Continuously grow as a developer and a team player</li>
+    </ul>
+    <p>
+      With a positive attitude, strong work ethic, and a passion for technology, I am ready to embrace new opportunities that allow me to learn, contribute, and make an impact.
+    </p>
+  </div>
+
+  <a class="btn" href="C:\Users\anugr\OneDrive\Desktop\content.html">&larr; Home</a>
+</body></html>
+
+content.html
+
+<html>
+<body bgcolor="#e6f2ff">
+  <center>
+	<img src="C:\Users\anugr\Downloads\resumeimg.webp"
+ width="350" height="250" style="border-radius: 50%; margin-top: 20px;"><br><br>
+    <h2>Welcome!</h2>
+	<p>This is my online resume. Use the menu on the left to explore my details.</p>
+  </center>
+</body>
+</html>
+ 
+projects.html
+
+<html>
+<head>
+  <title>Projects</title>
+  <style>
+	body {
+      background-color: #e6f2ff;
+  	font-family: Arial, sans-serif;
+	}
+	.project-box {
+  	border: 2px solid #4da6ff;
+  	border-radius: 10px;
+       	margin: 30px auto;
+  	width: 80%;
+  	background: #ffffff;
+	}
+	h2 {
+  	text-align: center;
+  	color: #003366;
+	}
+	.btn {
+  	display: inline-block;
+      background-color: #4da6ff;
+  	color: white;
+  	border-radius: 5px;
+  	margin: 20px;
+	}
+	.btn:hover {
+      background-color: #3399ff;
+	}
+	.center-img {
+  	text-align: center;
+  	margin: 20px 0;
+	}
+  </style>
+</head>
+<body>
+  <div class="project-box">
+    <h2>Projects</h2>
+    <p><b>E-commerce Management System</b> (DBMS Project)</p>
+	<p>Designed and implemented a database system to handle product listings, customer orders, and inventory management for an e-commerce platform.</p>
+ 
+    <p><b>Flutter Project – Book Management System</b></p>
+	<p>
+  	A Book Management System allows users to manage a personal or institutional book inventory. This includes adding, updating, deleting, and viewing book records with details like title, author, category, and availability.
+	</p>
+	<p>This app can be used by:</p>
+	<ul>
+      <li>Students managing their own digital bookshelf</li>
+  	<li>Small libraries or bookstores</li>
+  	<li>Admins in educational institutions</li>
+	</ul>
+  </div>
+	<div class="center-img">
+  <center>  <img src="C:\Users\anugr\OneDrive\Desktop\prjjimg.webp" height="300"></center><br>
+<a class="btn" href="C:\Users\anugr\OneDrive\Desktop\content.html">&larr; Home</a>
+  </div>
+</body>
+</html>
+
+ educational.html
+ 
+<html>
+<body bgcolor="#e6f2ff">
+  <h2>Education</h2>
+  <ul>
+    <li><b>B.Sc. Computer Science</b><br>PSGR Krishnammal College for Women, Coimbatore (2023 – 2026)</li>
+    <li><b>Higher Secondary School</b><br>Indira Gandhi Memorial Matriculation Hr. Sec. School, Madurai</li>
+  </ul>
+  <a class="btn" href="C:\Users\anugr\OneDrive\Desktop\content.html">&larr; Home</a><br><br>
+<center><img src="C:\Users\anugr\OneDrive\Desktop\educationimg.jpeg"></center>
+</body>
+</html>
+
+ internship.html
+ 
+ <html>
+<body bgcolor="#e6f2ff">
+  <h2>Internship Experience</h2>
+  <p><b>Company:</b> Ashika Readymade and Textiles, Madurai</p>
+  <p><h3>Worked with SMART 6.0 by Infotrack, a retail software for textile store operations. Managed sales, inventory, barcodes, and customer/vendor records. Gained practical experience in software-based business management and report generation.<h3></p>
+<a class= "btn" href ="C:\Users\anugr\OneDrive\Desktop\content.html"><- home </a><br><br>
+<center><img src="C:\Users\anugr\OneDrive\Desktop\intimg.jpeg"></center>
+</body>
+</html>
+
+ languages.html
+ 
+<html>
+<body bgcolor="#e6f2ff">
+  <h2>Languages Known</h2>
+  <ul>
+	<li>Tamil (Native)</li>
+	<li>English (Fluent)</li>
+	<li>Hindi (Completed "Rashtrabhasha Praveen")</li>
+  </ul>
+<a class= "btn" href ="C:\Users\anugr\OneDrive\Desktop\content.html"><- home </a>
+</body>
+</html>
+
+ skills.html
+ 
+<html>
+<head>
+  <title>Technical Skills</title>
+  <style>
+	body {
+      background-color: #e6f2ff;
+  	font-family: Arial, sans-serif;
+	}
+	.skills-box {
+  	background: #fff;
+  	border: 2px solid #4da6ff;
+  	border-radius: 10px;
+  	width: 80%;
+  	margin: 30px auto;
+	}
+	h2 {
+  	color: #003366;
+  	text-align: center;
+	}
+	ul {
+  	font-size: 16px;
+  	line-height: 1.6;
+	}
+	.btn {
+  	display: inline-block;
+ 	
+      background-color: #4da6ff;
+  	color: white
+  	border-radius: 5px;
+  	margin: 20px;
+	}
+	.center-img {
+  	text-align: center;
+  	margin: 20px 0;
+	}
+  </style>
+</head>
+<body>
+  <div class="skills-box">
+    <h2>Technical Skills</h2>
+	<ul>
+  	<li><b>Programming Languages:</b> Java</li>
+  	<li><b>Database:</b> SQLPlus</li>
+	</ul>
+	<p>
+      <b>Programming Language:</b> Java – Familiar with basic programming concepts like loops, conditions, classes, and objects.<br><br>
+      <b>Database:</b> SQLPlus – Able to write simple queries to create, retrieve, and manage data in Oracle databases.
+	</p>
+  </div>
+  <a class= "btn" href ="C:\Users\anugr\OneDrive\Desktop\content.html"><- home </a>
+  <div class="center-img">
+  </div>
+ 
+</body>
+</html>
+
+ strength.html
+ 
+ <html>
+<body bgcolor="#e6f2ff">
+  <h2>Key Strengths</h2>
+  <ul>
+    <li><b>Excellent Communication Skills</b></li>
+    <li><b>Team Collaboration</b></li>
+    <li><b>Adaptability</b><br><br>
+Excellent Communication Skills – Able to express ideas clearly and confidently in both verbal and written formats, making collaboration and presentations more effective.<br><br>
+Team Collaboration – Thrive in team-oriented environments, supporting group efforts, contributing ideas, and fostering a positive and productive team dynamic.<br><br>
+Adaptability – Quick to adjust to new tools, technologies, and work environments; open to learning and capable of staying productive in fast-paced situations.
+</li>
+  </ul>
+<a class= "btn" href ="C:\Users\anugr\OneDrive\Desktop\content.html"><- home </a>
+</body>
+</html>
+
+ declaration.html
+ 
+<html>
+<body bgcolor="#e6f2ff">
+  <h2>Declaration</h2>
+  <p>I hereby declare that the information provided above is true and correct to the best of my knowledge.<br>
+I solemnly affirm that all the details mentioned in this resume are accurate and complete to the best of my understanding. I take full responsibility for the authenticity of the same.</p>
+<a class= "btn" href ="C:\Users\anugr\OneDrive\Desktop\content.html"><- home </a>
+</body>
+</html>
+
+contact.html
+
+<html>
+<body bgcolor="#e6f2ff">
+  <h2>Contact</h2>  <p><b>Phone:</b> 8220854626</p>
+  <p><b>Email:</b> 23bcs004@psgrkcw.ac.in</p>
+ <p><b>LinkedIn:</b> <a href="https://www.linkedin.com/in/v-anugrahaa" target="_blank">v-anugrahaa</a></p>
+  <p><b>GitHub:</b> <a href="https://github.com/anugrahaa-v" target="_blank">anugrahaa-v</a></p>
+<a class= "btn" href ="C:\Users\anugr\OneDrive\Desktop\content.html"><- home </a>
+</body>
+</html>
+
+footer.html
+
+<html>
+<body bgcolor="#003366">
+  <center>
+	<font color="white" size="3">© 2025 Anugrahaa V | PSGR Krishnammal College for Women</font>
+  </center>
+</body></html> 
+
+
+
+
+
+
+
