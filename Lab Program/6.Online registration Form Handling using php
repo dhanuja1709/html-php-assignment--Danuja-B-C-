@@ -1,0 +1,120 @@
+Registration.php
+
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+	// Collect form data
+	$name = $_POST['name'];
+	$email = $_POST['email'];
+	$password = $_POST['password'];
+?>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Registration Result</title>
+	<style>
+    	body {
+        	font-family: Arial, sans-serif;
+        	background: #f8f9fa;
+    	}
+    	.container {
+        	width: 40%;
+        	margin: 50px auto;
+        	background: #fff;
+        	padding: 20px;
+        	border-radius: 10px;
+        	border: 1px solid #ccc;
+        	box-shadow: 0px 3px 8px rgba(0,0,0,0.1);
+        	text-align: center;
+    	}
+    	h2 { color: green; }
+    	p { font-size: 16px; }
+	</style>
+</head>
+<body>
+	<div class="container">
+    	<h2>Registration Successful!</h2>
+    	<p><b>Name:</b> <?php echo $name; ?></p>
+    	<p><b>Email:</b> <?php echo $email; ?></p>
+    	<p><b>Password:</b> <?php echo $password; ?> </p>
+    	<!-- In real projects, never display password -->
+	</div>
+</body>
+</html>
+<?php
+} else {
+?>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Online Registration Form</title>
+	<style>
+    	body {
+        	font-family: Arial, sans-serif;
+        	background: #eef2f3;
+    	}
+    	.form-box {
+        	width: 40%;
+        	margin: 50px auto;
+        	background: #fff;
+        	padding: 20px;
+        	border-radius: 10px;
+        	border: 1px solid #ccc;
+        	box-shadow: 0px 3px 8px rgba(0,0,0,0.1);
+    	}
+    	h2 {
+        	text-align: center;
+        	color: #007bff;
+    	}
+    	label {
+        	display: block;
+        	margin: 10px 0 5px;
+        	font-weight: bold;
+    	}
+    	input[type=text], input[type=email], input[type=password] {
+        	width: 95%;
+        	padding: 8px;
+        	margin-bottom: 15px;
+        	border: 1px solid #ccc;
+        	border-radius: 5px;
+    	}
+    	input[type=submit] {
+        	width: 100%;
+        	padding: 10px;
+        	background: #007bff;
+        	color: white;
+        	font-size: 16px;
+        	border: none;
+        	border-radius: 5px;
+        	cursor: pointer;
+    	}
+    	input[type=submit]:hover {
+        	background: #0056b3;
+    	}
+	</style>
+</head>
+<body>
+	<div class="form-box">
+    	<h2>Online Registration Form</h2>
+    	<form method="post" action="">
+        	<label>Name:</label>
+        	<input type="text" name="name" required>
+ 
+        	<label>Email:</label>
+        	<input type="email" name="email" required>
+ 
+            <label>Password:</label>
+        	<input type="password" name="password" required>
+ 
+        	<input type="submit" value="Register">
+    	</form>
+	</div>
+</body>
+</html>
+<?php
+}
+?>
+
+
+
+
+
