@@ -1,0 +1,283 @@
+database Table
+
+CREATE TABLE users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(50) NOT NULL UNIQUE,
+  gamer_tag VARCHAR(40) NOT NULL UNIQUE,
+  email VARCHAR(120) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  avatar_url VARCHAR(255) DEFAULT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+config.php
+
+<?php
+$servername = "127.0.0.1";
+$username = "root";
+$password = "";
+$dbname = "hub";  // Use your database name here
+$port = 3306;          // Default MySQL port in XAMPP
+$conn = new mysqli($servername, $username, $password, $dbname, $port);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+?>
+
+register.php
+
+<?php
+include('config.php');
+session_start();
+
+if(isset($_POST['register'])) {
+    $username = trim($_POST['username']);
+    $gamer_tag = trim($_POST['gamer_tag']);
+    $email = trim($_POST['email']);
+    $password = $_POST['password'];
+    $confirm = $_POST['confirm_password'];
+    $avatar_url = trim($_POST['avatar_url']);
+    
+    if ($password !== $confirm) {
+        echo "<script>alert('Passwords do not match!');</script>";
+    } elseif (strlen($password) < 6) {
+        echo "<script>alert('Password must be at least 6 characters.');</script>";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo "<script>alert('Invalid email format');</script>";
+    } else {
+        $passwordHash = password_hash($password, PASSWORD_BCRYPT);
+        $sql = "INSERT INTO users (username, gamer_tag, email, password, avatar_url) VALUES (?, ?, ?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        if ($stmt === false) {
+            die("Prepare failed: " . $conn->error);
+        }
+        $stmt->bind_param("sssss", $username, $gamer_tag, $email, $passwordHash, $avatar_url);
+        if ($stmt->execute()) {
+            header("Location: login.php?registered=1");
+            exit();
+        } else {
+            echo "<script>alert('Registration failed: Username, gamer tag, or email may already exist.');</script>";
+        }
+        $stmt->close();
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Game Portal Registration</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="container">
+  <h2>Register for Game Portal</h2>
+  <form action="" method="post" onsubmit="return validateRegisterForm();">
+    <input type="text" name="username" placeholder="Login Username" required autocomplete="username" />
+    <input type="text" name="gamer_tag" placeholder="Gamer Tag" required autocomplete="nickname" />
+    <input type="email" name="email" placeholder="Email" required autocomplete="email" />
+    <input type="password" name="password" placeholder="Password" required autocomplete="new-password" />
+    <input type="password" name="confirm_password" placeholder="Retype Password" required autocomplete="new-password" />
+    <input type="text" name="avatar_url" placeholder="Avatar URL (optional)">
+    <button type="submit" name="register">Register</button>
+    <p>Already have an account? <a href="login.php">Login now</a></p>
+  </form>
+</div>
+<script>
+function validateRegisterForm() {
+    var pw = document.forms[0]["password"].value;
+    var cpw = document.forms[0]["confirm_password"].value;
+    if (pw !== cpw) {
+        alert("Passwords do not match!");
+        return false;
+    }
+    if (pw.length < 6) {
+        alert("Password must be at least 6 characters.");
+        return false;
+    }
+    return true;
+}
+</script>
+</body>
+</html>
+
+login.php
+
+<?php
+include('config.php');
+session_start();
+if(isset($_POST['login'])) {
+    $login_input = trim($_POST['login_input']);
+    $password = $_POST['password'];
+    if(empty($login_input) || empty($password)) {
+        echo "<script>alert('Please enter both username/gamer tag and password.');</script>";
+    } else {
+        $stmt = $conn->prepare("SELECT id, username, gamer_tag, password FROM users WHERE username = ? OR gamer_tag = ?");
+        if ($stmt === false) {
+            die("Prepare failed: " . $conn->error);
+        }
+        $stmt->bind_param("ss", $login_input, $login_input);
+        $stmt->execute();
+        $stmt->store_result();
+        if($stmt->num_rows > 0) {
+            $stmt->bind_result($id, $username, $gamer_tag, $hashedPassword);
+            $stmt->fetch();
+            if(password_verify($password, $hashedPassword)) {
+                $_SESSION['username'] = $username;
+                $_SESSION['gamer_tag'] = $gamer_tag;
+                $_SESSION['user_id'] = $id;
+                header('Location: home.php');
+                exit();
+            } else {
+                echo "<script>alert('Incorrect password.');</script>";
+            }
+        } else {
+            echo "<script>alert('User not found with that username or gamer tag.');</script>";
+        }
+        $stmt->close();
+    }
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Game Portal Login</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="container">
+  <h2>Login to Game Portal</h2>
+  <form action="" method="post">
+    <input type="text" name="login_input" placeholder="Username or Gamer Tag" required autocomplete="username" />
+    <input type="password" name="password" placeholder="Password" required autocomplete="current-password" />
+    <button type="submit" name="login">Login</button>
+    <p>New user? <a href="register.php">Register now</a></p>
+  </form>
+</div>
+</body>
+</html>
+
+home.php
+
+<?php
+session_start();
+if(!isset($_SESSION['username'])) {
+    header('Location: login.php');
+    exit();
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Game Portal Home</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="container">
+  <h2>Welcome, <?php echo htmlspecialchars($_SESSION['gamer_tag']); ?>!</h2>
+  <p>You have successfully logged in to the Game Portal.</p>
+  <a href="logout.php">Logout</a>
+</div>
+</body>
+</html>
+
+styles.css
+
+body {
+    background: #fff; /* Set the page background to white */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    color: #222; /* Dark text for good contrast */
+}
+
+.container {
+    background: #fff; /* Form background white */
+    border: 3px solid #e10600; /* Red border for gaming accent */
+    max-width: 420px;
+    padding: 2.2em;
+    margin: 3em 0;
+    border-radius: 14px;
+    box-shadow: 0 0 26px #e1060012;
+    text-align: center;
+}
+h2 {
+    font-weight: 700;
+    color: #e10600; /* Gaming accent */
+    margin-bottom: 1.3em;
+    font-family: 'Segoe UI', sans-serif;
+    letter-spacing: 1.5px;
+}
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+    width: 100%;
+    padding: 1em;
+    margin: 0.85em 0;
+    border: 2px solid #e10600;
+    background: #f7f7f7; /* Pale gray for input fields */
+    color: #222;
+    border-radius: 8px;
+    font-size: 1.05em;
+}
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus {
+    border-color: #ff2a2a;
+    background: #fff;
+    outline: none;
+}
+button {
+    width: 100%;
+    background: linear-gradient(90deg, #e10600, #ff5353);
+    color: white;
+    padding: 1.15em;
+    border: none;
+    border-radius: 10px;
+    font-weight: 900;
+    letter-spacing: 1.2px;
+    font-size: 1.15em;
+    margin-top: 1.4em;
+    cursor: pointer;
+    box-shadow: 0 0 18px #ff3a3a22;
+    transition: background 0.25s, transform 0.18s;
+}
+button:hover {
+    background: linear-gradient(90deg, #ff3a3a, #ff1212);
+    transform: scale(1.08);
+    box-shadow: 0 0 30px #ff383822;
+}
+a {
+    color: #e10600;
+    font-weight: bold;
+    text-decoration: underline wavy #ff5353;
+    transition: color 0.3s;
+}
+a:hover {
+    color: #ff2a2a;
+}
+@media screen and (max-width: 600px) {
+    .container {
+        max-width: 94%;
+        padding: 1.7em;
+        margin: 2em auto;
+    }
+}
+
+logout.php
+
+<?php
+session_start();
+session_unset();
+session_destroy();
+header('Location: login.php');
+exit();
+?>
+
