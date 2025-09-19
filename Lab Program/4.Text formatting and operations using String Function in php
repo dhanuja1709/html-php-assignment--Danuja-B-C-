@@ -1,0 +1,87 @@
+String.php
+
+<?php
+$text = "Hello World";
+?>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>String Functions in PHP</title>
+	<style>
+    	body {
+        	font-family: Arial, sans-serif;
+        	background: #f8f9fa;
+    	}
+    	.container {
+        	width: 50%;
+        	margin: 40px auto;
+        	background: white;
+        	padding: 20px;
+        	border-radius: 10px;
+        	border: 1px solid #ccc;
+        	box-shadow: 0px 3px 8px rgba(0,0,0,0.1);
+    	}
+    	h2 {
+        	text-align: center;
+        	color: #007bff;
+    	}
+    	table {
+        	width: 100%;
+        	border-collapse: collapse;
+        	margin-top: 15px;
+    	}
+    	th, td {
+        	border: 1px solid #999;
+        	padding: 8px;
+        	text-align: center;
+    	}
+    	th {
+        	background: #007bff;
+        	color: white;
+    	}
+    	td {
+        	background: #f4f6f7;
+    	}
+	</style>
+</head>
+<body>
+	<div class="container">
+    	<h2>String Functions in PHP</h2>
+    	<table>
+        	<tr>
+            	<th>Operation</th>
+            	<th>Result</th>
+        	</tr>
+        	<tr>
+            	<td>Original Text</td>
+            	<td><?php echo $text; ?></td>
+        	</tr>
+        	<tr>
+            	<td>Uppercase</td>
+            	<td><?php echo strtoupper($text); ?></td>
+        	</tr>
+        	<tr>
+            	<td>Lowercase</td>
+            	<td><?php echo strtolower($text); ?></td>
+        	</tr>
+        	<tr>
+            	<td>Length</td>
+            	<td><?php echo strlen($text); ?></td>
+        	</tr>
+        	<tr>
+            	<td>Reversed</td>
+            	<td><?php echo strrev($text); ?></td>
+        	</tr>
+        	<tr>
+            	<td>Replace 'World' with 'PHP'</td>
+            	<td><?php echo str_replace("World", "PHP", $text); ?></td>
+        	</tr>
+        	<tr>
+            	<td>Substring (first 5 letters)</td>
+            	<td><?php echo substr($text, 0, 5); ?></td>
+        	</tr>
+    	</table>
+	</div>
+</body>
+</html>
+
