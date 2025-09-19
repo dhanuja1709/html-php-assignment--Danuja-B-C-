@@ -1,0 +1,680 @@
+config.php
+
+<?php
+$host = "localhost";
+$user = "root";   
+$pass = "";       
+$dbname = "myproject";
+$conn = new mysqli($host, $user, $pass, $dbname);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+?>
+
+index.php
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome - PSGRKCW</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom right, #f3e8ff, #e9d5ff);
+        }
+        header {
+            padding: 20px;
+            background: none; 
+        }
+        header img.logo {
+            max-width: 800px;  
+            height: auto;
+            display: block;
+            margin: 0 auto;     
+        }
+        .container {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0px 8px 20px rgba(0,0,0,0.2);
+            max-width: 400px;
+            width: 90%;
+        }
+        .card h2 {
+            margin-bottom: 25px;
+            font-size: 24px;
+            color: #4a148c;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 25px;
+            margin: 10px;
+            font-size: 16px;
+            background: #7b1fa2;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+        .button:hover {
+            background: #4a148c;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="https://www.psgrkcw.ac.in/wp-content/themes/psgrkcw/assets/images/psgrkcw-new-logo.png" 
+             alt="PSGRKCW Logo" class="logo">
+    </header>
+    <div class="container">
+        <div class="card">
+            <h2>Welcome to PSGRKCW Portal</h2>
+            <a href="register.php" class="button">Register</a>
+            <a href="login.php" class="button">Login</a>
+        </div>
+    </div>
+</body>
+</html>
+
+register.php
+
+<?php
+$success_message = "";
+$error_message = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $conn = new mysqli("localhost", "root", "", "myproject");
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    $username   = $_POST['username'];
+    $email      = $_POST['email'];
+    $password   = $_POST['password'];
+    $repassword = $_POST['repassword'];
+    $role       = $_POST['role']; // student or teacher
+    if ($password !== $repassword) {
+        $error_message = "Passwords do not match!";
+    } elseif (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/", $password)) {
+        $error_message = "Password must be at least 8 characters long and include upper, lower, number, and special character.";
+    } else {    
+        $sql = "INSERT INTO users (username, email, password, role) 
+                VALUES ('$username', '$email', '$password', '$role')";
+        if ($conn->query($sql) === TRUE) {
+            $success_message = "Registration successful!";
+        } else {
+            $error_message = "Error: " . $conn->error;
+        }
+    }
+    $conn->close();}
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register - PSGRKCW</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom right, #f3e8ff, #e9d5ff);
+        }
+        header { padding: 20px; text-align: center; }
+        header img.logo { max-width: 500px; height: auto; display: block; margin: 0 auto; }
+        .container { margin-top: 30px; display: flex; justify-content: center; align-items: center; }
+        .card {
+            background: white; padding: 40px; border-radius: 15px;
+            box-shadow: 0px 8px 20px rgba(0,0,0,0.2);
+            max-width: 400px; width: 90%;
+        }
+        .card h2 { margin-bottom: 20px; color: #4a148c; }
+        input, select {
+            width: 90%; padding: 10px; margin: 10px 0;
+            border: 1px solid #aaa; border-radius: 8px;
+        }
+        .button {
+            display: inline-block; padding: 12px 25px; margin: 10px;
+            font-size: 16px; background: #7b1fa2; color: #fff;
+            border: none; border-radius: 8px; cursor: pointer;
+            transition: 0.3s;
+        }
+        .button:hover { background: #4a148c; transform: scale(1.05); }
+        .message { margin-top: 15px; font-weight: bold; }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+<header>
+    <img src="https://www.psgrkcw.ac.in/wp-content/themes/psgrkcw/assets/images/psgrkcw-new-logo.png" 
+         alt="PSGRKCW Logo" class="logo">
+</header>
+<div class="container">
+    <div class="card">
+        <h2>Register</h2>
+        <?php if ($success_message): ?>
+            <p class="message success"><?php echo $success_message; ?></p>
+            <a href="index.php" class="button">Go to Home</a>
+        <?php else: ?>
+            <?php if ($error_message): ?>
+                <p class="message error"><?php echo $error_message; ?></p>
+            <?php endif; ?>
+            <form method="POST">
+                <input type="text" name="username" placeholder="Enter Username" required><br>
+                <input type="email" name="email" placeholder="Enter Email" required><br>
+                <input type="password" name="password" placeholder="Enter Password" required><br>
+                <input type="password" name="repassword" placeholder="Re-type Password" required><br>
+                    <select name="role" required>
+                    <option value="student">Student</option>
+                    <option value="teacher">Teacher</option>
+                </select><br>   
+                <button type="submit" class="button">Register</button>
+            </form>
+        <?php endif; ?>
+    </div>
+</div>
+</body>
+</html>
+
+login.php
+
+<?php
+session_start();
+$success_message = "";
+$error_message = "";
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $conn = new mysqli("localhost", "root", "", "myproject");
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $sql = "SELECT * FROM users WHERE email='$email' AND password='$password'";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $_SESSION['user'] = $row['email'];
+        $_SESSION['user_id'] = $row['id'];
+        $_SESSION['role'] = $row['role'];
+        if ($row['role'] === 'teacher') {
+            header("Location: addmarks.php");
+            exit();
+        } elseif ($row['role'] === 'student') {
+            header("Location: viewmarks.php");
+            exit();
+        } else {
+            $error_message = "Unknown role. Please contact admin.";
+        }
+    } else {
+        $error_message = "Invalid email or password!";
+    }
+    $conn->close();
+}
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login - PSGRKCW</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom right, #f3e8ff, #e9d5ff);
+        }
+        header {
+            padding: 20px;
+            text-align: center;
+        }
+        header img.logo {
+            max-width: 500px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        .container {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0px 8px 20px rgba(0,0,0,0.2);
+            max-width: 400px;
+            width: 90%;
+        }
+        .card h2 {
+            margin-bottom: 20px;
+            color: #4a148c;
+        }
+        input[type=email], input[type=password] {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #aaa;
+            border-radius: 8px;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 25px;
+            margin: 10px;
+            font-size: 16px;
+            background: #7b1fa2;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .button:hover {
+            background: #4a148c;
+            transform: scale(1.05);
+        }
+        .forgot-link {
+            display: block;
+            margin-top: 15px;
+            color: #4a148c;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .forgot-link:hover {
+            text-decoration: underline;
+        }
+        .message {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="https://www.psgrkcw.ac.in/wp-content/themes/psgrkcw/assets/images/psgrkcw-new-logo.png" 
+             alt="PSGRKCW Logo" class="logo">
+    </header> 
+    <div class="container">
+        <div class="card">
+            <h2>Login</h2>
+            <?php if ($error_message): ?>
+                <p class="message error"><?php echo $error_message; ?></p>
+            <?php endif; ?>
+            <form method="POST">
+                <input type="email" name="email" placeholder="Enter Email" required><br>
+                <input type="password" name="password" placeholder="Enter Password" required><br>
+                <button type="submit" class="button">Login</button>
+            </form>
+            <a href="forgot_password.php" class="forgot-link">Forgot Password?</a>
+        </div>
+    </div>
+</body>
+</html>
+
+logout.php
+
+<?php
+session_start();
+$_SESSION = array();
+session_destroy();
+header("Location: login.php");
+exit();
+?>
+forgot_password.php
+<?php
+$success_message = "";
+$error_message = "";
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $conn = new mysqli("localhost", "root", "", "myproject");
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    $email = $_POST['email'];
+    $new_password = $_POST['new_password'];
+    $re_password = $_POST['re_password'];
+    if ($new_password !== $re_password) {
+        $error_message = "Passwords do not match!";
+    } else {
+        $sql = "UPDATE users SET password='$new_password' WHERE email='$email'";
+        if ($conn->query($sql) === TRUE) {
+            if ($conn->affected_rows > 0) {
+                $success_message = "Password updated successfully!";
+            } else {
+                $error_message = "No account found with this email.";
+            }
+        } else {
+            $error_message = "Error: " . $conn->error;
+        }
+    }
+    $conn->close();
+}
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Forgot Password - PSGRKCW</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: linear-gradient(to bottom right, #f3e8ff, #e9d5ff);
+        }
+        header {
+            padding: 20px;
+        }
+        header img.logo {
+            max-width: 500px;
+            margin: 0 auto;
+            display: block;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+        }
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            max-width: 400px;
+            width: 90%;
+        }
+        .card h2 { color: #4a148c; }
+        input[type=email], input[type=password] {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #aaa;
+            border-radius: 8px;
+        }
+        .button {
+            background: #7b1fa2;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .button:hover {
+            background: #4a148c;
+        }
+        .message { font-weight: bold; margin-top: 15px; }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="https://www.psgrkcw.ac.in/wp-content/themes/psgrkcw/assets/images/psgrkcw-new-logo.png" 
+             alt="PSGRKCW Logo" class="logo">
+    </header>
+    <div class="container">
+        <div class="card">
+            <h2>Reset Password</h2>
+            <?php if ($success_message): ?>
+                <p class="message success"><?php echo $success_message; ?></p>
+                <a href="login.php" class="button">Back to Login</a>
+            <?php else: ?>
+                <?php if ($error_message): ?>
+                    <p class="message error"><?php echo $error_message; ?></p>
+                <?php endif; ?>
+                <form method="POST">
+                    <input type="email" name="email" placeholder="Enter Registered Email" required><br>
+                    <input type="password" name="new_password" placeholder="Enter New Password" required><br>
+                    <input type="password" name="re_password" placeholder="Re-enter New Password" required><br>
+                    <button type="submit" class="button">Update Password</button>
+                </form>
+            <?php endif; ?>
+        </div>
+    </div>
+</body>
+</html>
+
+addmarks.php
+
+<?php
+session_start();
+if (!isset($_SESSION['user']) || $_SESSION['role'] !== 'teacher') {
+    header("Location: login.php");
+    exit();
+}
+$conn = new mysqli("localhost", "root", "", "myproject");
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+$message = "";
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $student_id = $_POST['student_id'];
+    $subject = $_POST['subject'];
+    $marks = $_POST['marks'];
+    $teacher_id = $_SESSION['user_id'];
+    $sql = "INSERT INTO marks (student_id, subject, marks, teacher_id, date_added) 
+            VALUES ('$student_id', '$subject', '$marks', '$teacher_id', NOW())";
+    if ($conn->query($sql) === TRUE) {
+        $message = "✅ Marks added successfully!";
+    } else {
+        $message = "❌ Error: " . $conn->error;
+    }
+}
+$students = $conn->query("SELECT id, username FROM users WHERE role='student'");
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Marks - PSGRKCW</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom right, #f3e8ff, #e9d5ff);
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        header {
+            padding: 20px;
+        }
+        header img {
+            max-width: 400px;
+            height: auto;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 450px;
+            box-shadow: 0px 6px 18px rgba(0,0,0,0.2);
+        }
+        h2 {
+            color: #7b1fa2;
+            margin-bottom: 20px;
+        }
+        input, select {
+            width: 90%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+        button, .button {
+            background: #7b1fa2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+        button:hover, .button:hover {
+            background: #4a148c;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="https://www.psgrkcw.ac.in/wp-content/themes/psgrkcw/assets/images/psgrkcw-new-logo.png" alt="PSGRKCW Logo">
+    </header>
+    <div class="container">
+        <div class="card">
+            <h2>Add Marks</h2>
+            <p style="color:green;"><?php echo $message; ?></p>
+            <form method="POST">
+                <select name="student_id" required>
+                    <option value="">-- Select Student --</option>
+                    <?php while ($row = $students->fetch_assoc()) { ?>
+                        <option value="<?php echo $row['id']; ?>"><?php echo $row['username']; ?></option>
+                    <?php } ?>
+                </select><br>
+                <input type="text" name="subject" placeholder="Enter Subject" required><br>
+                <input type="number" name="marks" placeholder="Enter Marks" required><br>
+                <button type="submit">Add Marks</button>
+            </form>
+            <br>
+            <a href="logout.php" class="button">Logout</a>
+        </div>
+    </div>
+</body>
+</html>
+
+viewmarks.php
+
+<?php
+session_start();
+if (!isset($_SESSION['user']) || $_SESSION['role'] !== 'student') {
+    header("Location: login.php");
+    exit();
+}
+$conn = new mysqli("localhost", "root", "", "myproject");
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+$student_id = $_SESSION['user_id'];
+$sql = "SELECT m.subject, m.marks, m.date_added, u.username AS teacher_name
+        FROM marks m
+        JOIN users u ON m.teacher_id = u.id
+        WHERE m.student_id = '$student_id'
+        ORDER BY m.date_added DESC";
+$result = $conn->query($sql);
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Marks - PSGRKCW</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom right, #f3e8ff, #e9d5ff);
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        header {
+            padding: 20px;
+        }
+        header img {
+            max-width: 400px;
+            height: auto;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 700px;
+            box-shadow: 0px 6px 18px rgba(0,0,0,0.2);
+        }
+        h2 {
+            color: #7b1fa2;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th {
+            background: #7b1fa2;
+            color: white;
+            padding: 10px;
+        }
+        td {
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+        .button {
+            background: #7b1fa2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 15px;
+        }
+        .button:hover {
+            background: #4a148c;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="https://www.psgrkcw.ac.in/wp-content/themes/psgrkcw/assets/images/psgrkcw-new-logo.png" alt="PSGRKCW Logo">
+    </header>
+    <div class="container">
+        <div class="card">
+            <h2>Your Marks</h2>
+            <table>
+                <tr>
+                    <th>Subject</th>
+                    <th>Marks</th>
+                    <th>Teacher</th>
+                    <th>Date Added</th>
+                </tr>
+                <?php if ($result->num_rows > 0) { ?>
+                    <?php while ($row = $result->fetch_assoc()) { ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($row['subject']); ?></td>
+                            <td><?php echo htmlspecialchars($row['marks']); ?></td>
+                            <td><?php echo htmlspecialchars($row['teacher_name']); ?></td>
+                            <td><?php echo htmlspecialchars($row['date_added']); ?></td>
+                        </tr>
+                    <?php } ?>
+                <?php } else { ?>
+                    <tr>
+                        <td colspan="4" style="color:red;">No marks found yet.</td>
+                    </tr>
+                <?php } ?>
+            </table>
+            <br>
+            <a href="logout.php" class="button">Logout</a>
+        </div>
+    </div>
+</body> 
+</html>
