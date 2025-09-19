@@ -1,0 +1,121 @@
+Inventory.php
+
+<?php
+// Inventory (item => quantity)
+$inventory = array(
+	"Pen" => 10,
+	"Book" => 5,
+	"Pencil" => 15
+);
+ 
+// Add and remove items
+$itemToAdd = "Book";
+$itemToRemove = "Pencil";
+ 
+// Add stock
+if (isset($inventory[$itemToAdd])) {
+	$inventory[$itemToAdd] += 3; // add 3 books
+}
+ 
+// Remove stock
+if (isset($inventory[$itemToRemove])) {
+	if ($inventory[$itemToRemove] > 0) {
+    	$inventory[$itemToRemove] -= 2; // remove 2 pencils
+	}
+}
+?>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Inventory Management</title>
+	<style>
+    	body {
+        	font-family: Arial, sans-serif;
+        	background: #f8f9fa;
+    	}
+    	.box {
+        	width: 50%;
+        	margin: 30px auto;
+        	padding: 20px;
+        	background: white;
+        	border: 1px solid #ccc;
+        	border-radius: 10px;
+    	}
+    	h2 {
+        	text-align: center;
+        	color: #444;
+    	}
+    	table {
+        	width: 100%;
+        	border-collapse: collapse;
+        	margin-top: 15px;
+    	}
+    	th, td {
+        	border: 1px solid #999;
+        	padding: 8px;
+        	text-align: center;
+    	}
+    	th {
+        	background: #007bff;
+        	color: white;
+    	}
+    	.out {
+        	color: red;
+        	font-weight: bold;
+    	}
+	</style>
+</head>
+<body>
+<div class="box">
+	<h2>Current Inventory</h2>
+	<table>
+    	<tr>
+        	<th>Item</th>
+        	<th>Quantity</th>
+    	</tr>
+        <tr><td>Pen</td><td>10</td></tr>
+        <tr><td>Book</td><td>5</td></tr>
+        <tr><td>Pencil</td><td>15</td></tr>
+	</table>
+ 
+	<h2>Updated Inventory</h2>
+	<table>
+    	<tr>
+        	<th>Item</th>
+        	<th>Quantity</th>
+    	</tr>
+    	<?php foreach ($inventory as $item => $qty) { ?>
+        	<tr>
+            	<td><?php echo $item; ?></td>
+            	<td>
+                	<?php
+                    	if ($qty == 0) {
+                        	echo "<span class='out'>OUT OF STOCK</span>";
+                    	} else {
+                        	echo $qty;
+                    	}
+                	?>
+            	</td>
+        	</tr>
+    	<?php } ?>
+	</table>
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
